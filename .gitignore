@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/vendor
 /storage/*.key
 /vendor
 /.idea
@@ -13,3 +14,6 @@ yarn-error.log
 .env
 .phpunit.result.cache
 _ide_helper.php
+/app/Providers/TelescopeServiceProvider.php
+/config/telescope.php
+/public/info.php
