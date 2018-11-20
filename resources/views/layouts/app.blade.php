@@ -18,6 +18,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!--Dynamic StyleSheets added from a view would be pasted here-->
+    @yield('styles')
 </head>
 <body>
     <div id="app">

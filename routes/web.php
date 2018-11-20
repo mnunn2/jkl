@@ -11,10 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/{any}', function(){
+            return view('jklapp');
+    })->where('any', '.*')->middleware('auth');
+
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
+//Route::get('/jkl', function () {
+//    return view('jklapp');
+//});
+
+// Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+

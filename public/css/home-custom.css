@@ -1,0 +1,30 @@
+.foo-container {
+    background-color: #64d5ca;
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bar {
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: width 300ms ease-in;
+}
+
+.bar img {
+    transition: transform 300ms ease-in;
+}
+
+.foo-container:hover .bar {
+    width: 110px;
+}
+
+.foo-container:hover img {
+    transform: rotate(-90deg);
+}
+.more {
+    font-size: 1.5rem;
+    vertical-align: middle;
+}

@@ -17,9 +17,6 @@
                     You are logged in!
                 </div>
                 <div class="card-body">
-                    <Passport-clients></Passport-clients>
-                    <Passport-authorized-clients></Passport-authorized-clients>
-                    <Passport-personal-access-tokens></Passport-personal-access-tokens>
                 </div>
             </div>
         </div>
