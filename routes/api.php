@@ -17,8 +17,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('workers', 'API\WorkerController@index'); //->middleware('auth:api');
-Route::get('worker/{worker}', 'API\WorkerController@show');
+Route::middleware('auth:api')->group(function () {
+    Route::get('workers', 'API\WorkerController@index');
+    Route::get('worker/{worker}', 'API\WorkerController@show');
+});
+
+
+
+//Route::get('workers', 'API\WorkerController@index')->middleware('auth:api');
+//Route::get('worker/{worker}', 'API\WorkerController@show');
 
 //Route::apiResources([
 //    'workers' => 'API\WorkerController'

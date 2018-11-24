@@ -1,42 +1,50 @@
 <template>
     <b-container>
         <b-row>
-        <div v-for="joke in jokes" :key="joke.id">
-            <b-card v-bind:title="joke.id"
-                    img-src="https://placeimg.com/100/100/nature"
-                    tag="article"
-                    style="max-width: 20rem;"
-                    class="mb-2">
-                <p class="card-text">{{ joke.forename }}</p>
-                <p class="card-text">{{ joke.last_name }}</p>
-            </b-card>
-        </div>
+            <!--<b-table striped hover :items="jokes"></b-table>-->
+            <div>
+                <b-form-select v-model="selected" :options="workerOptions" class="mb-3" />
+                <div>Selected: <strong>{{ selected }}</strong></div>
+            </div>
         </b-row>
         <b-row>
-            <b-button @click="getStuff" variant="primary">Click Me</b-button>
+            <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
         </b-row>
     </b-container>
 </template>
 <script>
     import axios from 'axios';
     export default {
-        props : ['title'],
         data() {
             return {
-                jokes: []
+                selected: null,
+                workers: [],
+                workerOptions: []
             };
         },
+        created() {
+            this.getWorkers();
+        },
         methods: {
-            getStuff: function () {
+            createWorkerOptions: function (){
+                this.workerOptions = this.workers.map( function (obj) {
+                    var rObj = {};
+                    rObj['value'] = obj.id;
+                    rObj['text'] = obj.forename + " " + obj.last_name;
+                    return rObj; });
+                this.workerOptions.unshift({ value: null, text: 'Select a worker' });
+            },
+
+            getWorkers: function (){
                 axios.get('http://www.jkl.com/api/workers')
                     .then(response => {
-                        this.jokes = response.data;
-                        console.log(response.data);
+                        this.workers = response.data;
+                        this.createWorkerOptions();
                     }).catch(function (error) {
                     console.log(error);
                 });
             }
-        }
+        },
     }
 </script>
 <style scoped>
