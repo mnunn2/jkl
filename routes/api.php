@@ -20,6 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group(function () {
     Route::get('workers', 'API\WorkerController@index');
     Route::get('worker/{worker}', 'API\WorkerController@show');
+
+    Route::get('jobs', 'API\JobController@index');
+
+    Route::get('projects', 'API\ProjectController@index');
 });
 
 
