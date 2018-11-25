@@ -8,7 +8,7 @@
             </div>
         </b-row>
         <b-row>
-            <b-form-select @change="getJobsPerProj" v-model="projectSelected" :options="projectOptions" class="mb-3" />
+            <b-form-select @change="createJobOptions" v-model="projectSelected" :options="projectOptions" class="mb-3" />
             <div>Selected: <strong>{{ projectSelected }}</strong></div>
             <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
         </b-row>
@@ -38,6 +38,7 @@
         created() {
             this.getProjects();
             this.getWorkers();
+            this.getJobs();
         },
         methods: {
             createWorkerOptions: function (params){
@@ -58,11 +59,17 @@
                 this.projectOptions.unshift({ value: null, text: 'Select a project' });
             },
 
-            createJobOptions: function (params){
-                this.jobOptions = this.jobs.map( function (obj) {
+            createJobOptions: function (projId){
+                // calling the function from @change without parenthesis
+                // automatically passes the value of selected item
+                this.jobOptions = this.jobs.filter( function (obj) {
+                    if(obj.project_id === projId){
+                        return true;
+                    }
+                }).map( function (obj) {
                     var rObj = {};
                     rObj['value'] = obj.id;
-                    rObj['text'] = obj[params[0]] + " " + obj[params[1]];
+                    rObj['text'] = obj.name + ", " + obj.description;
                     return rObj; });
                 this.jobOptions.unshift({ value: null, text: 'Select a job' });
             },
@@ -82,6 +89,15 @@
                     .then(response => {
                         this.workers = response.data;
                         this.createWorkerOptions(['forename', 'last_name']);
+                    }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+
+            getJobs: function (){
+                axios.get('http://www.jkl.com/api/jobs')
+                    .then(response => {
+                        this.jobs = response.data;
                     }).catch(function (error) {
                     console.log(error);
                 });
