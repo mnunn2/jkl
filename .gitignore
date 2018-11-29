@@ -17,5 +17,5 @@ _ide_helper.php
 /app/Providers/TelescopeServiceProvider.php
 /config/telescope.php
 /public/info.php
-config/database.php
+/config/database.php
 tags
