@@ -28,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Project routes:
     Route::get('projects', 'API\ProjectController@index');
+    Route::get('projects/{project}/jobs', 'API\ProjectController@getProjectJobs');
 
     // TimeEntry routes:
 

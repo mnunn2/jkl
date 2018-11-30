@@ -20,6 +20,13 @@ class ProjectController extends Controller
         return response()->json($projects);
     }
 
+    public function getProjectJobs(Project $project)
+    {
+        //$project = Project::find($projectId);
+        return response()->json($project->jobs);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
