@@ -18,12 +18,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function () {
+
+    // Worker routes:
     Route::get('workers', 'API\WorkerController@index');
     Route::get('worker/{worker}', 'API\WorkerController@show');
 
+    // Job routes:
     Route::get('jobs', 'API\JobController@index');
 
+    // Project routes:
     Route::get('projects', 'API\ProjectController@index');
+
+    // TimeEntry routes:
+
 });
 
 

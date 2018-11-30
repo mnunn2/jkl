@@ -103,18 +103,20 @@
                 });
             },
 
-            getJobsPerProj: function (projId){
-                // calling the function without parenthesis automatically
-                // passes the value of selected item
-                console.log('projid ', projId);
-                axios.get('http://www.jkl.com/api/jobs')
-                    .then(response => {
-                        this.jobs = response.data;
-                        this.createJobOptions(['name', 'description']);
-                    }).catch(function (error) {
-                    console.log(error);
-                });
-            }
+            // currently loading all jobs then selecting them per proj
+            
+            // getJobsPerProj: function (projId){
+            //     // calling the function without parenthesis automatically
+            //     // passes the value of selected item
+            //     console.log('projid ', projId);
+            //     axios.get('http://www.jkl.com/api/jobs')
+            //         .then(response => {
+            //             this.jobs = response.data;
+            //             this.createJobOptions(['name', 'description']);
+            //         }).catch(function (error) {
+            //         console.log(error);
+            //     });
+            // }
         },
     }
 </script>
