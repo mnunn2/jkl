@@ -22,9 +22,7 @@ class ProjectController extends Controller
 
     public function getProjectJobs(Project $project)
     {
-        //$project = Project::find($projectId);
         return response()->json($project->jobs);
-
     }
 
     /**

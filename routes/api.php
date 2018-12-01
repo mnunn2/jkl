@@ -22,6 +22,9 @@ Route::middleware('auth:api')->group(function () {
     // Worker routes:
     Route::get('workers', 'API\WorkerController@index');
     Route::get('worker/{worker}', 'API\WorkerController@show');
+    Route::get('worker/{worker}/jobs', 'API\WorkerController@getWorkerJobs');
+    Route::post('worker/{worker}/job/{jobId}', 'API\WorkerController@postWorkerJob');
+    Route::delete('worker/{worker}/job/{jobId}', 'API\WorkerController@deleteWorkerJob');
 
     // Job routes:
     Route::get('jobs', 'API\JobController@index');

@@ -42,6 +42,21 @@ class WorkerController extends Controller
         return response()->json($worker);
     }
 
+    public function getWorkerJobs(Worker $worker)
+    {
+        return response()->json($worker->jobs);
+    }
+
+    public function postWorkerJob(Worker $worker, $jobId)
+    {
+        return response()->json($worker->jobs()->attach($jobId));
+    }
+
+    public function deleteWorkerJob(Worker $worker, $jobId)
+    {
+        return response()->json($worker->jobs()->detach($jobId));
+    }
+
     /**
      * Update the specified resource in storage.
      *
