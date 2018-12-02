@@ -34,6 +34,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('projects/{project}/jobs', 'API\ProjectController@getProjectJobs');
 
     // TimeEntry routes:
+    Route::get('time-entries', 'API\TimeEntryController@index');
+    Route::post('time-entry', 'API\TimeEntryController@store');
 
 });
 
