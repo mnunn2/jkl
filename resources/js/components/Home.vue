@@ -1,125 +1,105 @@
 <template>
-    <b-container>
-        <b-row>
-            <!--<b-table striped hover :items="jokes"></b-table>-->
-            <div>
-                <b-form-select v-model="workerSelected" :options="workerOptions" class="mb-3" />
-                <div>Selected: <strong>{{ workerSelected }}</strong></div>
-            </div>
-        </b-row>
-        <b-row>
-            <b-form-select @change="createJobOptions" v-model="projectSelected" :options="projectOptions" class="mb-3" />
-            <div>Selected: <strong>{{ projectSelected }}</strong></div>
-            <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
-        </b-row>
-        <b-row>
-            <b-form-select v-model="jobSelected" :options="jobOptions" class="mb-3" />
-            <div>Selected: <strong>{{ jobSelected }}</strong></div>
-            <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
-        </b-row>
-    </b-container>
+  <b-container>
+    <b-row>
+      <!--<b-table striped hover :items="jokes"></b-table>-->
+      <div v-if="workerOptions">
+        <b-form-select v-model="workerSelected" :options="workerOptions" class="mb-3"/>
+        <div>
+          Selected:
+          <strong>{{ workerSelected }}</strong>
+        </div>
+      </div>
+    </b-row>
+    <b-row>
+      <b-form-select
+        @change="createJobOptions"
+        v-model="projectSelected"
+        :options="projectOptions"
+        class="mb-3"
+      />
+      <div>
+        Selected:
+        <strong>{{ projectSelected }}</strong>
+      </div>
+      <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
+    </b-row>
+    <b-row>
+      <b-form-select v-model="jobSelected" :options="jobOptions" class="mb-3"/>
+      <div>
+        Selected:
+        <strong>{{ jobSelected }}</strong>
+      </div>
+      <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
+    </b-row>
+    <b-row>
+    </b-row>
+  </b-container>
 </template>
 <script>
-    import axios from 'axios';
-    export default {
-        data() {
-            return {
-                projectSelected: null,
-                workerSelected: null,
-                jobSelected: null,
-                projects: [],
-                workers: [],
-                jobs: [],
-                workerOptions: [],
-                jobOptions: [],
-                projectOptions: []
-            };
-        },
-        created() {
-            this.getProjects();
-            this.getWorkers();
-            this.getJobs();
-        },
-        methods: {
-            createWorkerOptions: function (params){
-                this.workerOptions = this.workers.map( function (obj) {
-                    var rObj = {};
-                    rObj['value'] = obj.id;
-                    rObj['text'] = obj[params[0]] + " " + obj[params[1]];
-                    return rObj; });
-                this.workerOptions.unshift({ value: null, text: 'Select a worker' });
-            },
+import axios from "axios";
 
-            createProjectOptions: function (params){
-                this.projectOptions = this.projects.map( function (obj) {
-                    var rObj = {};
-                    rObj['value'] = obj.id;
-                    rObj['text'] = obj[params[0]];
-                    return rObj; });
-                this.projectOptions.unshift({ value: null, text: 'Select a project' });
-            },
+export default {
+  computed : {
 
-            createJobOptions: function (projId){
-                // calling the function from @change without parenthesis
-                // automatically passes the value of selected item
-                this.jobOptions = this.jobs.filter( function (obj) {
-                    if(obj.project_id === projId){
-                        return true;
-                    }
-                }).map( function (obj) {
-                    var rObj = {};
-                    rObj['value'] = obj.id;
-                    rObj['text'] = obj.name + ", " + obj.description;
-                    return rObj; });
-                this.jobOptions.unshift({ value: null, text: 'Select a job' });
-            },
+    workerOptions() {
+      let workerOptions = this.$store.state.workers.map(function(obj) {
+        var rObj = {};
+        rObj["value"] = obj.id;
+        rObj["text"] = obj['forename'] + " " + obj['last_name'];
+        return rObj;
+      });
+      workerOptions.unshift({ value: null, text: "Select a worker" });
+      return workerOptions;
+    },
 
-            getProjects: function (){
-                axios.get('http://www.jkl.com/api/projects')
-                    .then(response => {
-                        this.projects = response.data;
-                        this.createProjectOptions(['name']);
-                    }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-
-            getWorkers: function (){
-                axios.get('http://www.jkl.com/api/workers')
-                    .then(response => {
-                        this.workers = response.data;
-                        this.createWorkerOptions(['forename', 'last_name']);
-                    }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-
-            getJobs: function (){
-                axios.get('http://www.jkl.com/api/jobs')
-                    .then(response => {
-                        this.jobs = response.data;
-                    }).catch(function (error) {
-                    console.log(error);
-                });
-            },
-
-            // currently loading all jobs then selecting them per proj
-            
-            // getJobsPerProj: function (projId){
-            //     // calling the function without parenthesis automatically
-            //     // passes the value of selected item
-            //     console.log('projid ', projId);
-            //     axios.get('http://www.jkl.com/api/jobs')
-            //         .then(response => {
-            //             this.jobs = response.data;
-            //             this.createJobOptions(['name', 'description']);
-            //         }).catch(function (error) {
-            //         console.log(error);
-            //     });
-            // }
-        },
+    projectOptions() {
+      let projectOptions = this.$store.state.projects.map(function(obj) {
+        var rObj = {};
+        rObj["value"] = obj.id;
+        rObj["text"] = obj['name'];
+        return rObj;
+      });
+      projectOptions.unshift({ value: null, text: "Select a project" });
+      return projectOptions;
     }
+
+  },
+
+  data() {
+    return {
+      projectSelected: null,
+      workerSelected: null,
+      jobSelected: null,
+      jobOptions: [],
+    };
+  },
+  created() {
+    this.$store.dispatch('FETCH_WORKERS');
+    this.$store.dispatch('FETCH_PROJECTS');
+    this.$store.dispatch('FETCH_JOBS');
+  },
+  methods: {
+
+    createJobOptions: function(projId) {
+      // calling the function from @change without parenthesis
+      // automatically passes the value of selected item
+      this.jobOptions = this.$store.state.jobs
+        .filter(function(obj) {
+          if (obj.project_id === projId) {
+            return true;
+          }
+        })
+        .map(function(obj) {
+          var rObj = {};
+          rObj["value"] = obj.id;
+          rObj["text"] = obj.name + ", " + obj.description;
+          return rObj;
+        });
+      this.jobOptions.unshift({ value: null, text: "Select a job" });
+    },
+
+  }
+};
 </script>
 <style scoped>
-
 </style>

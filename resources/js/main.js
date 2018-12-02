@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import { store } from './store/store'
 import App from './components/App'
 import Wibble from './components/Wibble'
 import Page from './components/Page'
@@ -54,6 +55,7 @@ const router = new VueRouter({
 });
 const app = new Vue({
     el: '#fred',
+    store,
     components: { App },
     router,
     mounted () {
