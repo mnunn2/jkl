@@ -57,5 +57,11 @@ export const store = new Vuex.Store({
       context.commit('SET_JOBS',data)
    },
 
+    SAVE_TIME_ENTRY : async (context,payload) => {
+      let { data } = await Axios.post("http://www.jkl.com/api/time-entry", payload)
+      //context.commit('SET_JOBS',data)
+      console.log(data);
+   },
+
   }
 })

@@ -1,44 +1,64 @@
 <template>
   <b-container>
-    <b-row>
-      <!--<b-table striped hover :items="jokes"></b-table>-->
-      <div v-if="workerOptions">
-        <b-form-select v-model="workerSelected" :options="workerOptions" class="mb-3"/>
-        <div>
-          Selected:
-          <strong>{{ workerSelected }}</strong>
-        </div>
-      </div>
-    </b-row>
-    <b-row>
-      <b-form-select
-        @change="createJobOptions"
-        v-model="projectSelected"
-        :options="projectOptions"
-        class="mb-3"
-      />
-      <div>
-        Selected:
-        <strong>{{ projectSelected }}</strong>
-      </div>
-      <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
-    </b-row>
-    <b-row>
-      <b-form-select v-model="jobSelected" :options="jobOptions" class="mb-3"/>
-      <div>
-        Selected:
-        <strong>{{ jobSelected }}</strong>
-      </div>
-      <!--<b-button @click="getStuff" variant="primary">Click Me</b-button>-->
-    </b-row>
-    <b-row>
-    </b-row>
+    <b-form @submit="addTimeEntry" @reset="onReset" v-if="workerOptions">
+      <b-form-group id="selectWorkerGroup"
+                    label="Select Worker:"
+                    label-for="workerSelect">
+        <b-form-select id="workerSelect"
+                      :options="workerOptions"
+                      required
+                      v-model="form.worker_id">
+        </b-form-select>
+      </b-form-group>
+      <b-form-group id="selectProjectGroup"
+                    label="Select Project:"
+                    label-for="projectSelect">
+        <b-form-select id="projectSelect"
+                    @change="createJobOptions"
+                    :options="projectOptions">
+        </b-form-select>
+      </b-form-group>
+      <b-form-group id="selectJobGroup"
+                    label="Select Job:"
+                    label-for="jobSelect">
+        <b-form-select id="jobSelect"
+                    :options="jobOptions"
+                    v-model="form.job_id">
+        </b-form-select>
+      </b-form-group>
+      <b-form-group id="timeInputGroup"
+                    label="Enter Hours:"
+                    label-for="timeInput"
+                    description="Plese enter time in hours and mins.">
+        <b-form-input id="timeInput"
+                      type="number"
+                      v-model="form.hours"
+                      required>
+        </b-form-input>
+      </b-form-group>
+
+      <b-button type="submit" variant="primary">Submit</b-button>
+      <b-button type="reset" variant="danger">Reset</b-button>
+    </b-form>
   </b-container>
 </template>
 <script>
 import axios from "axios";
 
 export default {
+  data() {
+    return {
+      form: {
+        worker_id: '',
+        job_id: '',
+        hours: '',
+        date: "2018-12-03",
+        amount: 100,
+        type: "fred"
+      },
+      jobOptions: [],
+    };
+  },
   computed : {
 
     workerOptions() {
@@ -65,20 +85,21 @@ export default {
 
   },
 
-  data() {
-    return {
-      projectSelected: null,
-      workerSelected: null,
-      jobSelected: null,
-      jobOptions: [],
-    };
-  },
   created() {
     this.$store.dispatch('FETCH_WORKERS');
     this.$store.dispatch('FETCH_PROJECTS');
     this.$store.dispatch('FETCH_JOBS');
   },
   methods: {
+
+    onReset: function() {
+      console.log('reset');
+    },
+
+    addTimeEntry: function(e) {
+      e.preventDefault();
+      this.$store.dispatch('SAVE_TIME_ENTRY', this.form);
+    },
 
     createJobOptions: function(projId) {
       // calling the function from @change without parenthesis
