@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-form @submit="addTimeEntry" @reset="onReset" v-if="workerOptions">
+  <b-container v-if="workerOptions">
+    <b-form @submit="addTimeEntry"  v-if="show">
       <b-form-group id="selectWorkerGroup"
                     label="Select Worker:"
                     label-for="workerSelect">
@@ -53,10 +53,10 @@ export default {
         job_id: '',
         hours: '',
         date: "2018-12-03",
-        amount: 100,
         type: "fred"
       },
       jobOptions: [],
+      show: true,
     };
   },
   computed : {
@@ -92,13 +92,18 @@ export default {
   },
   methods: {
 
-    onReset: function() {
-      console.log('reset');
+    formReset: function(e) {
+      this.form.worker_id = '';
+      this.form.job_id = '';
+      this.form.hours = '';
+      this.show = false;
+      this.$nextTick(() => { this.show = true });
     },
 
     addTimeEntry: function(e) {
       e.preventDefault();
       this.$store.dispatch('SAVE_TIME_ENTRY', this.form);
+      this.formReset();
     },
 
     createJobOptions: function(projId) {
