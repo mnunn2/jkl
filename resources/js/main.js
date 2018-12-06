@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import BootstrapVue from 'bootstrap-vue'
+import Vuetify from 'vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { store } from './store/store'
@@ -10,7 +10,7 @@ import Page from './components/Page'
 import Home from './components/Home'
 
 Vue.use(VueRouter);
-Vue.use(BootstrapVue);
+Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 
 let token = document.head.querySelector('meta[name="csrf-token"]');

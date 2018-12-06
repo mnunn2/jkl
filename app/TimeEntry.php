@@ -12,7 +12,7 @@ class TimeEntry extends Model
     {
         $worker = Worker::find($this->worker_id);
         //$this->amount = number_format((float) (($this->hours * $dailyRate) / 100), 2);
-        $this->amount = ($this->hours * $worker->daily_rate);
+        $this->amount = ceil($this->hours * ($worker->daily_rate / 8));
 
         parent::save();
     }

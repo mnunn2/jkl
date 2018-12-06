@@ -1,30 +1,64 @@
 <template>
-    <div>
-        <b-navbar toggleable="md" type="dark" variant="info">
+  <v-app>
+    <v-navigation-drawer v-model="drawer" fixed app>
+      <v-list dense>
+        <v-list-tile  :to="{ name: 'home' }">
+          <v-list-tile-action >
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile  :to="{ name: 'wibble' }">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Wibble</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        </v-list-tile>
+        <v-list-tile  :to="{ name: 'page' }">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Page</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar dark flat color="primary">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>JKL</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn flat :to="{ name: 'home' }">Home</v-btn>
+        <v-btn flat :to="{ name: 'wibble' }">Wibble</v-btn>
+        <v-btn flat :to="{ name: 'page' }">Page</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-content>
+      <v-container fluid>
+        <v-fade-transition mode="out-in">
+          <router-view></router-view>
+        </v-fade-transition>
+      </v-container>
+    </v-content>
 
-            <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-
-            <b-navbar-brand href="#">JKL</b-navbar-brand>
-
-            <b-collapse is-nav id="nav_collapse">
-
-                <b-navbar-nav>
-                    <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
-                    <b-nav-item :to="{ name: 'wibble' }">Wibble</b-nav-item>
-                    <b-nav-item :to="{ name: 'page' }">Page</b-nav-item>
-                </b-navbar-nav>
-
-            </b-collapse>
-        </b-navbar>
-        <main>
-            <router-view></router-view>
-        </main>
-    </div>
+    <!-- <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
+            <b-nav-item :to="{ name: 'wibble' }">Wibble</b-nav-item>
+    <b-nav-item :to="{ name: 'page' }">Page</b-nav-item>-->
+  </v-app>
 </template>
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
-    }
+export default {
+  data: () => ({
+    drawer: null
+  }),
+  mounted() {
+    console.log("Component mounted.");
+  }
+};
 </script>

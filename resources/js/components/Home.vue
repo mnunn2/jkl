@@ -1,46 +1,64 @@
 <template>
-  <b-container v-if="workerOptions">
-    <b-form @submit="addTimeEntry"  v-if="show">
-      <b-form-group id="selectWorkerGroup"
-                    label="Select Worker:"
-                    label-for="workerSelect">
-        <b-form-select id="workerSelect"
-                      :options="workerOptions"
-                      required
-                      v-model="form.worker_id">
-        </b-form-select>
-      </b-form-group>
-      <b-form-group id="selectProjectGroup"
-                    label="Select Project:"
-                    label-for="projectSelect">
-        <b-form-select id="projectSelect"
-                    @change="createJobOptions"
-                    :options="projectOptions">
-        </b-form-select>
-      </b-form-group>
-      <b-form-group id="selectJobGroup"
-                    label="Select Job:"
-                    label-for="jobSelect">
-        <b-form-select id="jobSelect"
-                    :options="jobOptions"
-                    v-model="form.job_id">
-        </b-form-select>
-      </b-form-group>
-      <b-form-group id="timeInputGroup"
-                    label="Enter Hours:"
-                    label-for="timeInput"
-                    description="Plese enter time in hours and mins.">
-        <b-form-input id="timeInput"
-                      type="number"
-                      v-model="form.hours"
-                      required>
-        </b-form-input>
-      </b-form-group>
-
-      <b-button type="submit" variant="primary">Submit</b-button>
-      <b-button type="reset" variant="danger">Reset</b-button>
-    </b-form>
-  </b-container>
+  <v-container v-if="workerOptions">
+    <v-form ref="form">
+      <v-select
+        id="workerSelect"
+        label="Select Worker"
+        :items="workerOptions"
+        v-model="formData.worker_id"
+      ></v-select>
+      <v-select
+        id="projectSelect"
+        label="Select Project"
+        @change="createJobOptions"
+        :items="projectOptions"
+      ></v-select>
+      <v-select id="jobSelect" label="Select Job" :items="jobOptions" v-model="formData.job_id"></v-select>
+      <!-- <v-text-field id="timeInput" type="number" v-model="formData.hours" required></v-text-field> -->
+      <v-dialog
+        ref="dialog"
+        v-model="modal2"
+        :return-value.sync="time"
+        persistent
+        lazy
+        full-width
+        width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          v-model="time"
+          label="Enter hours"
+          prepend-icon="access_time"
+          readonly
+        ></v-text-field>
+        <v-time-picker v-if="modal2" v-model="time" actions :allowed-minutes="allowedStep">
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
+          <v-btn flat color="primary" @click="$refs.dialog.save(time)">OK</v-btn>
+        </v-time-picker>
+      </v-dialog>
+            <v-menu
+        :close-on-content-click="false"
+        v-model="menu2"
+        :nudge-right="40"
+        lazy
+        transition="scale-transition"
+        offset-y
+        full-width
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          v-model="date"
+          label="Enter date"
+          prepend-icon="event"
+          readonly
+        ></v-text-field>
+        <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+      </v-menu>
+      <v-btn @click="submit">Submit</v-btn>
+    </v-form>
+  </v-container>
 </template>
 <script>
 import axios from "axios";
@@ -48,27 +66,29 @@ import axios from "axios";
 export default {
   data() {
     return {
-      form: {
-        worker_id: '',
-        job_id: '',
-        hours: '',
-        date: "2018-12-03",
+      formData: {
+        worker_id: "",
+        job_id: "",
+        hours: "",
+        date: "",
         type: "fred"
       },
       jobOptions: [],
       show: true,
+      modal2: false,
+      menu2: false,
+      date: new Date().toISOString().substr(0, 10),
+      time: null
     };
   },
-  computed : {
-
+  computed: {
     workerOptions() {
       let workerOptions = this.$store.state.workers.map(function(obj) {
         var rObj = {};
         rObj["value"] = obj.id;
-        rObj["text"] = obj['forename'] + " " + obj['last_name'];
+        rObj["text"] = obj["forename"] + " " + obj["last_name"];
         return rObj;
       });
-      workerOptions.unshift({ value: null, text: "Select a worker" });
       return workerOptions;
     },
 
@@ -76,34 +96,31 @@ export default {
       let projectOptions = this.$store.state.projects.map(function(obj) {
         var rObj = {};
         rObj["value"] = obj.id;
-        rObj["text"] = obj['name'];
+        rObj["text"] = obj["name"];
         return rObj;
       });
-      projectOptions.unshift({ value: null, text: "Select a project" });
       return projectOptions;
     }
-
   },
 
   created() {
-    this.$store.dispatch('FETCH_WORKERS');
-    this.$store.dispatch('FETCH_PROJECTS');
-    this.$store.dispatch('FETCH_JOBS');
+    this.$store.dispatch("FETCH_WORKERS");
+    this.$store.dispatch("FETCH_PROJECTS");
+    this.$store.dispatch("FETCH_JOBS");
   },
   methods: {
-
     formReset: function(e) {
-      this.form.worker_id = '';
-      this.form.job_id = '';
-      this.form.hours = '';
-      this.show = false;
-      this.$nextTick(() => { this.show = true });
+      this.$refs.form.reset();
     },
-
-    addTimeEntry: function(e) {
-      e.preventDefault();
-      this.$store.dispatch('SAVE_TIME_ENTRY', this.form);
-      this.formReset();
+    submit: function(e) {
+      // format the hours as a float
+      let hoursMinutes = this.time.split(/[.:]/);
+      let hours = parseInt(hoursMinutes[0], 10);
+      let minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+      this.formData.hours = hours + minutes / 60;
+      this.formData.date = this.date;
+      this.$store.dispatch("SAVE_TIME_ENTRY", this.formData);
+      this.$nextTick(() => this.formReset());
     },
 
     createJobOptions: function(projId) {
@@ -121,11 +138,16 @@ export default {
           rObj["text"] = obj.name + ", " + obj.description;
           return rObj;
         });
-      this.jobOptions.unshift({ value: null, text: "Select a job" });
     },
-
+    allowedStep: m => m % 30 === 0
   }
 };
 </script>
-<style scoped>
+<style>
+.v-time-picker-title__ampm {
+  display: none;
+}
+.v-time-picker-title {
+  justify-content: center;
+}
 </style>
