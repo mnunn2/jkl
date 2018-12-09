@@ -27,6 +27,9 @@ class WorkerController extends Controller
      */
     public function store(Request $request)
     {
+        $worker = Worker::create($request->all());
+        $worker->save();
+        return response()->json($worker);
         //
     }
 
