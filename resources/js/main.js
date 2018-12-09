@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 
-axios.defaults.baseURL = process.env.MIX_APP_BASE_URL + '/';
+axios.defaults.baseURL = process.env.MIX_APP_BASE_URL;
 
 let token = document.head.querySelector('meta[name="csrf-token"]');
 

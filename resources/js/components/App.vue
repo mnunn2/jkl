@@ -58,7 +58,7 @@ export default {
     drawer: null
   }),
   mounted() {
-    console.log("Component mounted.");
+    console.log(process.env.MIX_APP_BASE_URL);
   }
 };
 </script>
