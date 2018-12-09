@@ -17,5 +17,12 @@ _ide_helper.php
 /app/Providers/TelescopeServiceProvider.php
 /config/telescope.php
 /public/info.php
-/config/database.php
 tags
+/package-lock.json
+/public/css/app.css
+/public/js/main.js
+/public/mix-manifest.json
+/storage/*
+/public/css/app.css.map
+/public/js/main.js.map
+
