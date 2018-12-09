@@ -23,8 +23,10 @@
         <p class="login-lost">
             <a  href="{{ route('password.request') }}"> {{ __('Forgot Your Password?') }} </a>
         </p>
-        <label for="remember"> {{ __('Remember Me') }} </label>
-        <input  type="checkbox" name="remember" id="remember">
+        <p class="login-lost">
+            <label for="remember"> {{ __('Remember Me') }} </label>
+            <input  type="checkbox" name="remember" id="remember">
+        </p>
 
     </form>
 @endsection
