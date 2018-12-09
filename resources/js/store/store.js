@@ -43,22 +43,22 @@ export const store = new Vuex.Store({
   actions: {
 
     FETCH_WORKERS : async (context,payload) => {
-      let { data } = await Axios.get("http://www.jkl.com/api/workers")
+      let { data } = await Axios.get("api/workers")
       context.commit('SET_WORKERS',data)
    },
 
     FETCH_PROJECTS : async (context,payload) => {
-      let { data } = await Axios.get("http://www.jkl.com/api/projects")
+      let { data } = await Axios.get("api/projects")
       context.commit('SET_PROJECTS',data)
    },
 
     FETCH_JOBS : async (context,payload) => {
-      let { data } = await Axios.get("http://www.jkl.com/api/jobs")
+      let { data } = await Axios.get("api/jobs")
       context.commit('SET_JOBS',data)
    },
 
     SAVE_TIME_ENTRY : async (context,payload) => {
-      let { data } = await Axios.post("http://www.jkl.com/api/time-entry", payload)
+      let { data } = await Axios.post("api/time-entry", payload)
       //context.commit('SET_JOBS',data)
       console.log(data);
    },

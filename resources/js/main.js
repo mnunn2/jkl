@@ -13,6 +13,8 @@ Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 
+axios.defaults.baseURL = process.env.MIX_APP_BASE_URL + '/';
+
 let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
@@ -59,10 +61,5 @@ const app = new Vue({
     components: { App },
     router,
     mounted () {
-        this.axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(response => {
-                this.info = response;
-                console.log(this.info);
-            });
     }
 });
