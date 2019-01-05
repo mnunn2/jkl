@@ -15,7 +15,8 @@ class TimeEntryController extends Controller
      */
     public function index()
     {
-        $entries = TimeEntry::all();
+        //$entries = TimeEntry::all();
+        $entries = TimeEntry::with('worker', 'job')->get();
         return response()->json($entries);
     }
 
