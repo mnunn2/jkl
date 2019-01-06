@@ -1,73 +1,48 @@
 
 <template>
-    <div class="flex-center position-ref full-height">
-        <div class="content">
-            <div class="title m-b-md">
-                {{title}}
-            </div>
-            <!--<Passport-clients></Passport-clients>-->
-            <!--<Passport-authorized-clients></Passport-authorized-clients>-->
-            <Passport-personal-access-tokens></Passport-personal-access-tokens>
-
-            <div class="links">
-                <span class="subtitle">Name : {{author.name}}</span><br/>
-                <span class="subtitle">Role : {{author.role}}</span><br/>
-                <span class="subtitle">Code : {{author.code}}</span><br/>
-            </div>
-        </div>
-    </div>
+  <v-layout align-center justify-center>
+    <v-flex xs10 sm7 m3>
+      <v-data-table hide-actions :headers="headers" :items="timeEntries" class="elevation-0">
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.name }}</td>
+          <td class="text-xs-right">{{ props.item.job }}</td>
+          <td class="text-xs-right">{{ props.item.amount }}</td>
+        </template>
+      </v-data-table>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-    import AuthorizedClients from './passport/AuthorizedClients'
-    import Clients from './passport/Clients'
-    import PersonalAccessTokens from './passport/PersonalAccessTokens'
-    export default {
-        components : {
-            'Passport-authorized-clients': AuthorizedClients,
-            'Passport-clients': Clients,
-            'Passport-personal-access-tokens': PersonalAccessTokens,
-        },
-        props : ['title', 'author']
+export default {
+  data() {
+    return {
+      headers: [
+        { text: "Name", align: "left", sortable: false, value: "name" },
+        { text: "Job", align: "center", value: "job" },
+        { text: "Amount", value: "amount" },
+      ],
+    };
+  },
+  computed: {
+    timeEntries() {
+      let timeEntries = this.$store.state.timeEntries.map(function(obj) {
+        var rObj = {};
+        rObj["name"] = obj.worker.forename + " " + obj.worker.last_name;
+        rObj["amount"] = obj.amount / 100;
+        rObj["job"] = obj.job.name;
+        return rObj;
+      });
+      return timeEntries;
     }
+  },
+  created() {
+    this.$store.dispatch("FETCH_TIME_ENTRIES");
+  },
+  methods: {
+  }
+};
+  
 </script>
 <style scoped>
-    html, body {
-        background-color: #fff;
-        color: #939b9f;
-        font-family: 'Raleway', sans-serif;
-        font-weight: 100;
-        height: 100vh;
-        margin: 0;
-    }
-    .title {
-        font-size: 60px;
-    }
-    .subtitle {
-        font-size: 20px;
-    }
-    .full-height {
-        height: 100vh;
-    }
-
-    .flex-center {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
-    .position-ref {
-        position: relative;
-    }
-
-    .top-right {
-        position: absolute;
-        right: 10px;
-        top: 18px;
-    }
-    .content {
-        text-align: center;
-    }
-    .m-b-md {
-        margin-bottom: 30px;
-    }
 </style>

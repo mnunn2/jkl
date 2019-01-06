@@ -10,12 +10,12 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile  :to="{ name: 'wibble' }">
+        <v-list-tile  :to="{ name: 'admin' }">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Wibble</v-list-tile-title>
+            <v-list-tile-title>Admin</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
         <v-list-tile  :to="{ name: 'page' }">
@@ -34,7 +34,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn flat :to="{ name: 'home' }">Home</v-btn>
-        <v-btn flat :to="{ name: 'wibble' }">Wibble</v-btn>
+        <v-btn flat :to="{ name: 'admin' }">Admin</v-btn>
         <v-btn flat :to="{ name: 'page' }">Page</v-btn>
       </v-toolbar-items>
     </v-toolbar>

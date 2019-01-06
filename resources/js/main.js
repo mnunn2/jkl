@@ -5,7 +5,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { store } from './store/store'
 import App from './components/App'
-import Wibble from './components/Wibble'
+import Admin from './components/Admin'
 import Page from './components/Page'
 import Home from './components/Home'
 
@@ -34,10 +34,10 @@ const router = new VueRouter({
             props: { title: "This is JKL home" }
         },
         {
-            path: '/wibble',
-            name: 'wibble',
-            component: Wibble,
-            props: { title: "This is Wibble" }
+            path: '/admin',
+            name: 'admin',
+            component: Admin,
+            props: { title: "Admin" }
         },
         {
             path: '/spa-page',
