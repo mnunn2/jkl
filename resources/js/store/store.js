@@ -68,6 +68,7 @@ export const store = new Vuex.Store({
             let {
                 data
             } = await Axios.get("api/workers")
+            console.log('foo', data);
             context.commit('SET_WORKERS', data)
         },
         FETCH_PROJECTS: async (context, payload) => {
@@ -89,8 +90,22 @@ export const store = new Vuex.Store({
             //context.commit('SET_JOBS',data)
         },
         deleteTimeEntry: async (context, payload) => {
-            //let { data } = await Axios.post("api/time-entry", payload)
-            context.commit('DELETE_TIME_ENTRY', payload)
+            try {
+                const response = await Axios.delete("api/time-entry/" + payload);
+                context.commit('DELETE_TIME_ENTRY', payload)
+                console.log(response);
+              } catch (error) {
+                console.error(error);
+              }
+            //let { data } = await Axios.delete("api/time-entry/" + payload);
+            //context.commit('DELETE_TIME_ENTRY', payload)
+            // await axios.post('{{ request_absolute_uri }}', formData, config)
+            //     .then((response) => {
+            //         this.availabilityMessage = response.data.message;
+            //     }).catch((error) => {
+            //         this.availabilityMessage = false;
+            //         console.log(error);
+            //     });
         },
     }
 })

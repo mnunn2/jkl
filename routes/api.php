@@ -39,6 +39,7 @@ Route::middleware('auth:api')->group(function () {
     // TimeEntry routes:
     Route::get('time-entries', 'API\TimeEntryController@index');
     Route::post('time-entry', 'API\TimeEntryController@store');
+    Route::delete('time-entry/{id}', 'API\TimeEntryController@destroy');
 
 });
 

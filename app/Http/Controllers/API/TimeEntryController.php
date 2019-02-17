@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use phpDocumentor\Reflection\Types\Object_;
+use Validator;
 use App\TimeEntry;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,6 +30,22 @@ class TimeEntryController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->json()->all(), [
+            "job_id" => 'required',
+            "worker_id" => 'required',
+            "hours" => 'required',
+            "date" => 'required',
+            "type" => 'required'
+        ]);
+
+        if($validator->fails()){
+            $errors = [];
+            foreach ($validator->errors()->all() as $msg) {
+                $errors[] = $msg;
+            }
+            return response()->json(["errors" => $errors], 400);
+        }
+
         $entry = TimeEntry::create($request->all());
         $entry->save();
         return response()->json($entry);
@@ -64,6 +82,12 @@ class TimeEntryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if($entry = TimeEntry::find($id)){
+            $entry->delete();
+            return response()->json($entry);
+        }
+        return response()->json([
+            'message' => 'Record not found',
+        ], 404);
     }
 }
