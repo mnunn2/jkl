@@ -21,6 +21,8 @@ tags
 /package-lock.json
 /public/css/app.css
 /public/js/main.js
+/public/js/vendor.js
+/public/js/manifest.js
 /public/mix-manifest.json
 /storage/*
 /public/css/app.css.map
