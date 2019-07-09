@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import Axios from 'axios'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Axios from 'axios';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
@@ -29,12 +29,12 @@ export const store = new Vuex.Store({
         SET_TIME_ENTRIES: (state, payload) => {
             let timeEntries = payload.map(function (obj) {
                 var rObj = {};
-                rObj["id"] = obj.id;
-                rObj["name"] = obj.worker.forename + " " + obj.worker.last_name;
-                rObj["hours"] = obj.hours;
-                rObj["amount"] = obj.amount / 100;
-                rObj["job"] = obj.job.name;
-                rObj["date"] = obj.date;
+                rObj.id = obj.id;
+                rObj.name = obj.worker.forename + " " + obj.worker.last_name;
+                rObj.hours = obj.hours;
+                rObj.amount = obj.amount / 100;
+                rObj.job = obj.job.name;
+                rObj.date = obj.date;
                 return rObj;
             });
             state.timeEntries = timeEntries;
@@ -48,51 +48,45 @@ export const store = new Vuex.Store({
             //state.timeEntries = timeEntries;
         },
         SET_WORKERS: (state, payload) => {
-            state.workers = payload
+            state.workers = payload;
         },
         SET_PROJECTS: (state, payload) => {
-            state.projects = payload
+            state.projects = payload;
         },
         SET_JOBS: (state, payload) => {
-            state.jobs = payload
+            state.jobs = payload;
         },
     },
     actions: {
         FETCH_TIME_ENTRIES: async (context, payload) => {
-            let {
-                data
-            } = await Axios.get("api/time-entries")
-            context.commit('SET_TIME_ENTRIES', data)
+            let { data } = await Axios.get("api/time-entries");
+            context.commit('SET_TIME_ENTRIES', data);
         },
+
         FETCH_WORKERS: async (context, payload) => {
-            let {
-                data
-            } = await Axios.get("api/workers")
+            let { data } = await Axios.get("api/workers");
             console.log('foo', data);
-            context.commit('SET_WORKERS', data)
+            context.commit('SET_WORKERS', data);
         },
+
         FETCH_PROJECTS: async (context, payload) => {
-            let {
-                data
-            } = await Axios.get("api/projects")
-            context.commit('SET_PROJECTS', data)
+            let { data } = await Axios.get("api/projects");
+            context.commit('SET_PROJECTS', data);
         },
+
         FETCH_JOBS: async (context, payload) => {
-            let {
-                data
-            } = await Axios.get("api/jobs")
-            context.commit('SET_JOBS', data)
+            let { data } = await Axios.get("api/jobs");
+            context.commit('SET_JOBS', data);
         },
+
         SAVE_TIME_ENTRY: async (context, payload) => {
-            let {
-                data
-            } = await Axios.post("api/time-entry", payload)
-            //context.commit('SET_JOBS',data)
+            return Axios.post("api/time-entry", payload);
         },
+
         deleteTimeEntry: async (context, payload) => {
             try {
                 const response = await Axios.delete("api/time-entry/" + payload);
-                context.commit('DELETE_TIME_ENTRY', payload)
+                context.commit('DELETE_TIME_ENTRY', payload);
                 console.log(response);
               } catch (error) {
                 console.error(error);
@@ -108,4 +102,4 @@ export const store = new Vuex.Store({
             //     });
         },
     }
-})
+});

@@ -1,11 +1,12 @@
 <template>
   <v-layout align-center justify-center>
     <v-flex xs10 sm7 m3>
-      <v-form v-if="workerOptions" ref="form">
+      <v-form v-if="workerOptions" ref="form" lazy-validation >
         <v-select
           id="workerSelect"
           label="Select Worker"
           :items="workerOptions"
+          :rules="validationRules"
           v-model="formData.worker_id"
         ></v-select>
         <v-select
@@ -51,6 +52,8 @@
         </v-menu>
         <v-btn @click="submit">Submit</v-btn>
       </v-form>
+      <v-alert :value="success" type="success" transition="scale-transition">{{ hoursSent }} hours added to the above</v-alert>
+      <v-alert :value="failure" type="error" transition="scale-transition">{{ errorMsg }}</v-alert>
       <v-spacer></v-spacer>
     </v-flex>
   </v-layout>
@@ -61,8 +64,13 @@ import axios from "axios";
 export default {
   data() {
     return {
+      success: false,
+      hoursSent: 0,
+      failure: false,
+      errorMsg: "",
       halfHour: false,
       hours: [1, 2, 3, 4, 5, 6, 7, 8],
+      validationRules: [v => !!v || "field is required"],
       formData: {
         worker_id: "",
         job_id: "",
@@ -75,7 +83,7 @@ export default {
       modal2: false,
       menu2: false,
       date: new Date().toISOString().substr(0, 10),
-      time: null,
+      time: null
     };
   },
   computed: {
@@ -106,22 +114,47 @@ export default {
     this.$store.dispatch("FETCH_JOBS");
   },
   methods: {
-    formReset: function(e) {
-      this.$refs.form.reset();
+    clearSuccess: function(e) {
+      this.success = false;
     },
+
+    onSuccess: function(e) {
+      this.failure = false;
+      this.success = true;
+      this.hoursSent = this.formData.hours
+      this.formData.hours = 0;
+      //this.$nextTick(() => this.$refs.form.reset());
+    },
+
     submit: function(e) {
-      // add half hour
-      if (this.halfHour) {
-        this.formData.hours += 0.5;
+      //if(this.valid){
+      if (this.$refs.form.validate()) {
+        // add half hour
+        if (this.halfHour) {
+          this.formData.hours += 0.5;
+        }
+        this.formData.date = this.date;
+        this.$store
+          .dispatch("SAVE_TIME_ENTRY", this.formData)
+          .then(response => {
+            console.log("success", response);
+            this.onSuccess();
+          })
+          .catch(err => {
+            this.errorMsg = err;
+            this.success = false;
+            this.failure = true;
+          });
       }
-      this.formData.date = this.date;
-      this.$store.dispatch("SAVE_TIME_ENTRY", this.formData);
-      this.$nextTick(() => this.formReset());
     },
 
     createJobOptions: function(projId) {
+      //todo: add clearSuccess to @change on all inputs
+      //todo: add if halfHour to this.hoursSent
+      //todo: add validation rules to other input, can't add 0 hours
       // calling the function from @change without parenthesis
       // automatically passes the value of selected item
+      this.clearSuccess();
       this.jobOptions = this.$store.state.jobs
         .filter(function(obj) {
           if (obj.project_id === projId) {
