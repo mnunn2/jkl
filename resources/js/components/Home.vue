@@ -5,21 +5,30 @@
         <v-select
           id="workerSelect"
           label="Select Worker"
+          @change="clearSuccess"
           :items="workerOptions"
-          :rules="validationRules"
+          :rules="inputRules"
           v-model="formData.worker_id"
         ></v-select>
         <v-select
           id="projectSelect"
           label="Select Project"
           @change="createJobOptions"
+          :rules="inputRules"
           :items="projectOptions"
         ></v-select>
-        <v-select id="jobSelect" label="Select Job" :items="jobOptions" v-model="formData.job_id"></v-select>
+        <v-select
+          id="jobSelect"
+          label="Select Job"
+          @change="clearSuccess"
+          :items="jobOptions"
+          :rules="inputRules"
+          v-model="formData.job_id"
+          ></v-select>
         <!-- <v-text-field id="timeInput" type="number" v-model="formData.hours" required></v-text-field> -->
         <v-layout wrap justify-space-between>
           <v-flex xs3>
-            <v-select v-model="formData.hours" :items="hours" label="Hours">
+            <v-select v-model="formData.hours" :items="hours" label="Hours" @change="clearSuccess" :rules="hoursRules">
               <template slot="selection" slot-scope="{item}">
                 {{item}}
                 <span v-if="halfHour === true" class="grey--text caption">&nbsp; + .5</span>
@@ -27,7 +36,7 @@
             </v-select>
           </v-flex>
           <v-flex xs4>
-            <v-switch :label="`half Hour: `" v-model="halfHour"></v-switch>
+            <v-switch :label="`half Hour: `" v-model="halfHour" @change="clearSuccess"></v-switch>
           </v-flex>
         </v-layout>
 
@@ -48,7 +57,11 @@
             prepend-icon="event"
             readonly
           ></v-text-field>
-          <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+          <v-date-picker
+            v-model="date"
+            @change="clearSuccess"
+            @input="menu2 = false"
+            ></v-date-picker>
         </v-menu>
         <v-btn @click="submit">Submit</v-btn>
       </v-form>
@@ -70,7 +83,8 @@ export default {
       errorMsg: "",
       halfHour: false,
       hours: [1, 2, 3, 4, 5, 6, 7, 8],
-      validationRules: [v => !!v || "field is required"],
+      inputRules: [v => !!v || "field is required"],
+      hoursRules: [v => (v >= 0.5) || "at leaset an hour required"],
       formData: {
         worker_id: "",
         job_id: "",
@@ -123,11 +137,11 @@ export default {
       this.success = true;
       this.hoursSent = this.formData.hours
       this.formData.hours = 0;
-      //this.$nextTick(() => this.$refs.form.reset());
+      this.halfHour = false;
+      this.$nextTick(() => this.$refs.form.resetValidation());
     },
 
     submit: function(e) {
-      //if(this.valid){
       if (this.$refs.form.validate()) {
         // add half hour
         if (this.halfHour) {
@@ -145,11 +159,13 @@ export default {
             this.success = false;
             this.failure = true;
           });
+      } else {
+        this.clearSuccess();
       }
     },
 
     createJobOptions: function(projId) {
-      //todo: add clearSuccess to @change on all inputs
+      //todo: add clearSuccess to @change on all inputs not sure why select worker not firing clearSuccess
       //todo: add if halfHour to this.hoursSent
       //todo: add validation rules to other input, can't add 0 hours
       // calling the function from @change without parenthesis
