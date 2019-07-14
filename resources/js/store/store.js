@@ -65,7 +65,6 @@ export const store = new Vuex.Store({
 
         FETCH_WORKERS: async (context, payload) => {
             let { data } = await Axios.get("api/workers");
-            console.log('foo', data);
             context.commit('SET_WORKERS', data);
         },
 
