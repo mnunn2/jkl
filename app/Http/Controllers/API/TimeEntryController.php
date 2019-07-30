@@ -18,7 +18,8 @@ class TimeEntryController extends Controller
     public function index()
     {
         //$entries = TimeEntry::all();
-        $entries = TimeEntry::with('worker', 'job')->get();
+        $entries = TimeEntry::with('worker', 'job')->orderBy('id', 'desc')->paginate(10);
+        //$entries = TimeEntry::with('worker', 'job')->get();
         return response()->json($entries);
     }
 

@@ -13,9 +13,14 @@
 
 Auth::routes();
 
-Route::get('/{any}', function(){
-            return view('jklapp');
-    })->where('any', '.*')->middleware('auth');
+// removed {any} from after the route as api fallback route doesn't work
+Route::get('/', function(){
+    return view('jklapp');
+})->middleware('auth');
+
+Route::get('/{spa}', function(){
+    return view('jklapp');
+})->where('spa', 'admin|spa-page')->middleware('auth');
 
 //Route::get('/', function () {
 //    return view('welcome');

@@ -2,15 +2,15 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" fixed app>
       <v-list dense>
-        <v-list-tile  :to="{ name: 'home' }">
-          <v-list-tile-action >
+        <v-list-tile :to="{ name: 'home' }">
+          <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile  :to="{ name: 'admin' }">
+        <v-list-tile :to="{ name: 'admin' }">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
@@ -18,7 +18,7 @@
             <v-list-tile-title>Admin</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile  :to="{ name: 'page' }">
+        <v-list-tile :to="{ name: 'page' }">
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
           </v-list-tile-action>
@@ -26,6 +26,20 @@
             <v-list-tile-title>Page</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-group sub-group no-action>
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-title>Admin</v-list-tile-title>
+            </v-list-tile>
+          </template>
+
+          <v-list-tile v-for="(admin, i) in admins" :key="i" @click>
+            <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon v-text="admin[1]"></v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar dark flat color="primary">
@@ -45,19 +59,16 @@
         </v-fade-transition>
       </v-container>
     </v-content>
-
-    <!-- <b-nav-item :to="{ name: 'home' }">Home</b-nav-item>
-            <b-nav-item :to="{ name: 'wibble' }">Wibble</b-nav-item>
-    <b-nav-item :to="{ name: 'page' }">Page</b-nav-item>-->
   </v-app>
 </template>
 <script>
 export default {
   data: () => ({
-    drawer: null
+    drawer: null,
+    admins: [["Management", "people_outline"], ["Settings", "settings"]]
   }),
   mounted() {
-    console.log(process.env.MIX_APP_BASE_URL);
+    //console.log(process.env.MIX_APP_BASE_URL);
   }
 };
 </script>

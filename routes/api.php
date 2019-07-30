@@ -43,6 +43,9 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
+Route::fallback(function(){
+    return response()->json(['message' => 'Resource not Found!'], 404);
+});
 
 
 //Route::get('workers', 'API\WorkerController@index')->middleware('auth:api');

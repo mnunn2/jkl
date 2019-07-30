@@ -9,7 +9,6 @@ export const store = new Vuex.Store({
         workers: [],
         projects: [],
         jobs: [],
-        timeEntries: [],
     },
     getters: {
         GET_TIME_ENTRIES: state => {
@@ -26,27 +25,6 @@ export const store = new Vuex.Store({
         }
     },
     mutations: {
-        SET_TIME_ENTRIES: (state, payload) => {
-            let timeEntries = payload.map(function (obj) {
-                var rObj = {};
-                rObj.id = obj.id;
-                rObj.name = obj.worker.forename + " " + obj.worker.last_name;
-                rObj.hours = obj.hours;
-                rObj.amount = obj.amount / 100;
-                rObj.job = obj.job.name;
-                rObj.date = obj.date;
-                return rObj;
-            });
-            state.timeEntries = timeEntries;
-        },
-        DELETE_TIME_ENTRY: (state, payload) => {
-            //console.log(payload)
-            state.timeEntries = state.timeEntries.filter(function (obj) {
-                return obj.id !== payload;
-            });
-            //console.log(timeEntries)
-            //state.timeEntries = timeEntries;
-        },
         SET_WORKERS: (state, payload) => {
             state.workers = payload;
         },
@@ -58,11 +36,6 @@ export const store = new Vuex.Store({
         },
     },
     actions: {
-        FETCH_TIME_ENTRIES: async (context, payload) => {
-            let { data } = await Axios.get("api/time-entries");
-            context.commit('SET_TIME_ENTRIES', data);
-        },
-
         FETCH_WORKERS: async (context, payload) => {
             let { data } = await Axios.get("api/workers");
             context.commit('SET_WORKERS', data);
@@ -80,25 +53,6 @@ export const store = new Vuex.Store({
 
         SAVE_TIME_ENTRY: async (context, payload) => {
             return Axios.post("api/time-entry", payload);
-        },
-
-        deleteTimeEntry: async (context, payload) => {
-            try {
-                const response = await Axios.delete("api/time-entry/" + payload);
-                context.commit('DELETE_TIME_ENTRY', payload);
-                console.log(response);
-              } catch (error) {
-                console.error(error);
-              }
-            //let { data } = await Axios.delete("api/time-entry/" + payload);
-            //context.commit('DELETE_TIME_ENTRY', payload)
-            // await axios.post('{{ request_absolute_uri }}', formData, config)
-            //     .then((response) => {
-            //         this.availabilityMessage = response.data.message;
-            //     }).catch((error) => {
-            //         this.availabilityMessage = false;
-            //         console.log(error);
-            //     });
         },
     }
 });

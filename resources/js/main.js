@@ -3,7 +3,9 @@ import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import { store } from './store/store'
+import {
+    store
+} from './store/store'
 import App from './components/App'
 import Admin from './components/Admin'
 import Page from './components/Page'
@@ -24,20 +26,36 @@ if (token) {
 }
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
+//global axios interceptor to detect 401 unauthorised
+// hopefully to stopedge case where auth time out not detected
+axios.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    if (error.response.status === 401) {
+        console.log('i am foo');
+        location.reload();
+        //throw new error(error);
+    }
+    return Promise.reject(error);
+});
+
 const router = new VueRouter({
     mode: 'history',
-    routes: [
-        {
+    routes: [{
             path: '/',
             name: 'home',
             component: Home,
-            props: { title: "This is JKL home" }
+            props: {
+                title: "This is JKL home"
+            }
         },
         {
             path: '/admin',
             name: 'admin',
             component: Admin,
-            props: { title: "Admin" }
+            props: {
+                title: "Admin"
+            }
         },
         {
             path: '/spa-page',
@@ -45,10 +63,10 @@ const router = new VueRouter({
             component: Page,
             props: {
                 title: "This is the SPA Second Page",
-                author : {
-                    name : "Fisayo Afolayan",
-                    role : "Software Engineer",
-                    code : "Always keep it clean"
+                author: {
+                    name: "Fisayo Afolayan",
+                    role: "Software Engineer",
+                    code: "Always keep it clean"
                 }
             }
         },
@@ -58,8 +76,9 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#fred',
     store,
-    components: { App },
+    components: {
+        App
+    },
     router,
-    mounted () {
-    }
+    mounted() {}
 });
