@@ -1,18 +1,18 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Vuetify from 'vuetify'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import vuetify from './plugins/vuetify.js';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 import {
     store
-} from './store/store'
-import App from './components/App'
-import Admin from './components/Admin'
-import Page from './components/Page'
-import Home from './components/Home'
+} from './store/store';
+import App from './components/App';
+import TimeEntry from './components/TimeEntry';
+import Page from './components/Page';
+import Home from './components/Home';
 
 Vue.use(VueRouter);
-Vue.use(Vuetify);
+// Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 
 axios.defaults.baseURL = process.env.MIX_APP_BASE_URL;
@@ -50,11 +50,11 @@ const router = new VueRouter({
             }
         },
         {
-            path: '/admin',
-            name: 'admin',
-            component: Admin,
+            path: '/time-entry',
+            name: 'timeEntry',
+            component: TimeEntry,
             props: {
-                title: "Admin"
+                title: "Time Entries"
             }
         },
         {
@@ -75,6 +75,7 @@ const router = new VueRouter({
 });
 const app = new Vue({
     el: '#fred',
+    vuetify,
     store,
     components: {
         App

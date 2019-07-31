@@ -20,7 +20,7 @@ Route::get('/', function(){
 
 Route::get('/{spa}', function(){
     return view('jklapp');
-})->where('spa', 'admin|spa-page')->middleware('auth');
+})->where('spa', 'time-entry|spa-page')->middleware('auth');
 
 //Route::get('/', function () {
 //    return view('welcome');

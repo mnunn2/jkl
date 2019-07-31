@@ -20,6 +20,7 @@ _ide_helper.php
 tags
 /package-lock.json
 /public/css/app.css
+/public/js/*
 /public/js/main.js
 /public/js/vendor.js
 /public/js/manifest.js

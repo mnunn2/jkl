@@ -44,19 +44,20 @@
           :close-on-content-click="false"
           v-model="menu2"
           :nudge-right="40"
-          lazy
           transition="scale-transition"
           offset-y
           full-width
           min-width="290px"
         >
-          <v-text-field
-            slot="activator"
-            v-model="date"
-            label="Enter date"
-            prepend-icon="event"
-            readonly
-          ></v-text-field>
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              v-model="date"
+              label="Enter date"
+              prepend-icon="event"
+              readonly
+              v-on="on"
+            ></v-text-field>
+          </template>
           <v-date-picker
             v-model="date"
             @change="clearSuccess"
